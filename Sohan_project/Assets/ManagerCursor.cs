@@ -1,16 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Manager : MonoBehaviour
+public class ManagerCursor : MonoBehaviour
 {
     public GameObject cursor;
     public GameObject[] targets; 
     Vector3 worldPosition;
     public GameObject GOSelected;
 
-    static int SceneNumber;
+    public event Action<int> onSelectedItem;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,29 +25,9 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneNumber == 0)
-        {
-            CursorPosToWorldPos();
-            CheckCursorPosition();
-        }
-        else
-        {
-            StartCoroutine(WaitAndNextCoroutine());
-        }
-
+         CursorPosToWorldPos();
+         CheckCursorPosition();
     }
-
-
-    IEnumerator WaitAndNextCoroutine()
-    {
-        //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(5);
-        ChangeScene(0); 
-    }
-
-
-
-
 
 
     void CursorPosToWorldPos()
@@ -72,32 +54,24 @@ public class Manager : MonoBehaviour
                     DontDestroyOnLoad(GOSelected);
                     GOSelected.transform.position = new Vector3(0, 0, 0);
                     GOSelected.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-                    ChangeScene(1);
-
+                    
+                    onSelectedItem(1);
+                    //Debug.Log("targetgo.GetInstanceID()" + targetgo.GetInstanceID());
                 }
-
             }
             else
             {
                 if (targetgo.GetComponent<Target>().currentState != Target.State.Unselected)
                 {
                     targetgo.GetComponent<Target>().Outside();
-
                 }
             }
-
-
-
         }
     }
 
 
 
-    void ChangeScene(int scenenumber)
-    {
-        SceneManager.LoadScene(scenenumber);
-        SceneNumber = scenenumber;
-    }
+    
 
 
 
