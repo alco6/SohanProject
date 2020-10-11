@@ -12,7 +12,8 @@ public class ManagerCursor : MonoBehaviour
 
     public event Action<int> onSelectedItem;
 
-
+    public Vector3 position1;
+    public Vector3 position2;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,45 @@ public class ManagerCursor : MonoBehaviour
         //Set Cursor to not be visible
         Cursor.visible = false;
 
+
+        //Load Prefabs as GameObjects
+        GameObject[] allMaps = Resources.LoadAll<GameObject>("Prefabs");
+        //Generate 2 random numbers that will be the indexes of the selected GOs
+        Tuple<int, int> indexes = Generate2Randoms(allMaps.Length - 1);
+
+
+        targets = new GameObject[2];
+
+        //Instantiate the GOs  //Place them in the right position
+        position1 = new Vector3(-6,6,0);
+        position2 = new Vector3(6,6,0);
+        targets[0]= Instantiate(allMaps[indexes.Item1], position1, Quaternion.identity);
+        targets[1]= Instantiate(allMaps[indexes.Item2], position2, Quaternion.identity);
+
+        targets[0].AddComponent<Target>();
+        targets[1].AddComponent<Target>();
+        Debug.Log("targets -->" + targets); 
+
     }
+
+
+
+    public Tuple<int, int> Generate2Randoms(int len)
+    {
+        int a;
+        int b;
+        a = UnityEngine.Random.Range(0, len);
+        b = UnityEngine.Random.Range(0, len);
+        while (a == b)
+        {
+            b = UnityEngine.Random.Range(0, len);
+        }
+        Tuple<int, int> tupleout = new Tuple<int, int>(a, b);
+        Debug.Log("a  " + a + "b " + b);
+        return tupleout;
+    }
+
+
 
     // Update is called once per frame
     void Update()

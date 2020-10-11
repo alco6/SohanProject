@@ -13,8 +13,7 @@ public class GameManager : MonoBehaviour
 
     static int countPlays=0;
 
-    public Vector3 position1;
-    public Vector3 position2;
+
 
 
 
@@ -23,34 +22,15 @@ public class GameManager : MonoBehaviour
     {
         cursorGO.GetComponent<ManagerCursor>().onSelectedItem += WinnerSelectedGO;
         
-        //Load Prefabs as GameObjects
-        GameObject[] allMaps = Resources.LoadAll<GameObject>("Prefabs");
-        //Generate 2 random numbers that will be the indexes of the selected GOs
-        Tuple<int, int> indexes= Generate2Randoms(allMaps.Length -1);
-        //Instantiate the GOs 
-       // Instantiate(allMaps[indexes.Item1], position1, Quaternion.identity);
-       // Instantiate(allMaps[indexes.Item2], position2, Quaternion.identity);
-        //Place them in the right position
+       
+        
 
-        Debug.Log("Statick" + countPlays); 
+        Debug.Log("Count Plays" + countPlays); 
     }
 
 
 
-    public Tuple<int, int> Generate2Randoms(int len)
-    {
-        int a;
-        int b;
-        a = UnityEngine.Random.Range(0, len);
-        b = UnityEngine.Random.Range(0, len );
-        while (a == b)
-        {
-            b = UnityEngine.Random.Range(0, len);
-        }
-        Tuple<int,int> tupleout= new Tuple<int,int> (a,b);
-        Debug.Log("a  " + a + "b " + b); 
-        return tupleout; 
-    }
+  
 
 
     private void WinnerSelectedGO(int id)
